@@ -7,7 +7,13 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ReadFromZipDashboardComponent implements OnInit {
 
-  @Input() viewInfo: any;
+  @Input() resourceId: string;
+  public content = `
+  function save() {
+    console.log('save');
+  }
+  `;
+  public fileName = 'Hello.js';
   constructor() { }
 
   ngOnInit() {

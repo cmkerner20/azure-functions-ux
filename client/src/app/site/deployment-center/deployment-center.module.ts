@@ -24,6 +24,9 @@ import { ConfigureLocalGitComponent } from './deployment-center-setup/step-confi
 import { ReadFromZipDashboardComponent } from './provider-dashboards/read-from-zip-dashboard/read-from-zip-dashboard.component';
 import { SidebarModule } from 'ng-sidebar';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ZipFileExplorerComponent } from './provider-dashboards/read-from-zip-dashboard/zip-file-explorer/zip-file-explorer.component';
+import { SharedFunctionsModule } from '../../shared/shared-functions.module';
+import { DeploymentCredentialsComponent } from './provider-dashboards/deployment-credentials/deployment-credentials.component';
 
 
 @NgModule({
@@ -48,9 +51,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
         ConfigureExternalComponent,
         ConfigureBitbucketComponent,
         ConfigureLocalGitComponent,
-        ReadFromZipDashboardComponent
+        ReadFromZipDashboardComponent,
+        ZipFileExplorerComponent,
+        DeploymentCredentialsComponent
     ],
-    imports: [TranslateModule.forChild(), SharedModule, WizardModule, SidebarModule, NgSelectModule],
+    imports: [TranslateModule.forChild(), SharedModule, WizardModule, SidebarModule, NgSelectModule, SharedFunctionsModule],
     exports: [DeploymentCenterComponent]
 })
 export class DeploymentCenterModule {
