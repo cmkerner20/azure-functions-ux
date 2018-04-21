@@ -41,14 +41,26 @@
 
     <section id="site-tab-content">
 
-        <site-tab *ngFor="let info of tabInfos"
-            [title]="info.title"
-            [id]="info.id"
-            [active]="info.active"
-            [closeable]="info.closeable"
-            [iconUrl]="info.iconUrl"
-            [componentFactory]="info.componentFactory"
-            [componentInput]="info.componentInput"></site-tab>
+        <div *ngFor="let info of tabInfos">
+            <site-tab
+                [title]="info.title"
+                [id]="info.id"
+                [active]="info.active"
+                [closeable]="info.closeable"
+                [iconUrl]="info.iconUrl"
+                [lazyLoadRoute]="info.lazyloadRoute"
+                [componentFactory]="info.componentFactory"
+                [componentInput]="info.componentInput"></site-tab>
+
+            <app-settings-tab *ngIf="initing || info.id === 'site-config' || info.id === 'site-continuous-deployment'"
+                [title]="info.title"
+                [id]="info.id"
+                [active]="info.active"
+                [closeable]="info.closeable"
+                [iconUrl]="info.iconUrl"
+                [lazyLoadRoute]="info.lazyloadRoute"></app-settings-tab>
+
+        </div>
 
     </section>
 </div>

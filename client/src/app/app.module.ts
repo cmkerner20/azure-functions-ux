@@ -76,7 +76,10 @@ export const routes = RouterModule.forRoot([
         loadChildren: 'app/dev-guide/dev-guide.module#DevGuideModule'
     }
 
-]);
+],
+{
+    paramsInheritanceStrategy: 'always'
+});
 
 @NgModule(AppModule.moduleDefinition)
 export class AppModule {

@@ -6,7 +6,7 @@ import { LogicAppsComponent } from './../../logic-apps/logic-apps.component';
 import { Dom } from './../../shared/Utilities/dom';
 import { LogService } from './../../shared/services/log.service';
 import { ScenarioService } from './../../shared/services/scenario/scenario.service';
-import { SiteConfigComponent } from './../site-config/site-config.component';
+//import { SiteConfigComponent } from './../site-config/site-config.component';
 import { DirtyStateEvent } from './../../shared/models/broadcast-event';
 import { SiteConfigStandaloneComponent } from './../site-config-standalone/site-config-standalone.component';
 import { SwaggerDefinitionComponent } from './../swagger-definition/swagger-definition.component';
@@ -16,7 +16,7 @@ import { SiteManageComponent } from './../site-manage/site-manage.component';
 import { TabInfo } from './site-tab/tab-info';
 import { SiteSummaryComponent } from './../site-summary/site-summary.component';
 import { SiteData } from './../../tree-view/models/tree-view-info';
-import { Component, OnDestroy, ElementRef, ViewChild, Injector } from '@angular/core';
+import { Component, OnDestroy, ElementRef, ViewChild, Injector, AfterViewInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs/Subject';
 import { PortalService } from './../../shared/services/portal.service';
@@ -30,7 +30,7 @@ import { ArmObj } from '../../shared/models/arm/arm-obj';
 import { Site } from '../../shared/models/arm/site';
 import { PartSize } from '../../shared/models/portal';
 import { NavigableComponent, ExtendedTreeViewInfo } from '../../shared/components/navigable-component';
-import { DeploymentCenterComponent } from 'app/site/deployment-center/deployment-center.component';
+//import { DeploymentCenterComponent } from 'app/site/deployment-center/deployment-center.component';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -38,7 +38,7 @@ import { Observable } from 'rxjs/Observable';
     templateUrl: './site-dashboard.component.html',
     styleUrls: ['./site-dashboard.component.scss']
 })
-export class SiteDashboardComponent extends NavigableComponent implements OnDestroy {
+export class SiteDashboardComponent extends NavigableComponent implements OnDestroy, AfterViewInit {
     // We keep a static copy of all the tabs that are open becuase we want to reopen them
     // if a user changes apps or navigates away and comes back.  But we also create an instance
     // copy because the template can't reference static properties
@@ -57,7 +57,7 @@ export class SiteDashboardComponent extends NavigableComponent implements OnDest
     private _currentTabIndex: number;
 
     private _openTabSubscription: Subscription;
-
+    public initing = true;
     constructor(
         private _globalStateService: GlobalStateService,
         private _aiService: AiService,
@@ -103,7 +103,10 @@ export class SiteDashboardComponent extends NavigableComponent implements OnDest
             this._currentTabIndex = this.tabInfos.findIndex(info => info.active);
         }
     }
-
+    ngAfterViewInit() { //<------ Runs after initializing the component's views and child views
+        // more code...
+        this.initing = false; //<------ Now you can remove DOM that contains router-outlet
+    }
     setup(navigationEvents: Observable<ExtendedTreeViewInfo>): Observable<any> {
         return super.setup(navigationEvents)
             .switchMap(viewInfo => {
@@ -268,6 +271,7 @@ export class SiteDashboardComponent extends NavigableComponent implements OnDest
             closeable: true,
             iconUrl: null,
             dirty: false,
+            lazyloadRoute: '',
             componentFactory: null,
             componentInput: input
                 ? Object.assign({}, input, { viewInfo: input.viewInfoInput, viewInfoComponent_viewInfo: input.viewInfoInput })
@@ -308,7 +312,8 @@ export class SiteDashboardComponent extends NavigableComponent implements OnDest
             case SiteTabIds.applicationSettings:
                 info.title = this._translateService.instant(PortalResources.tab_applicationSettings);
                 info.iconUrl = 'image/application-settings.svg';
-                info.componentFactory = SiteConfigComponent;
+                info.lazyloadRoute = this.viewInfo && `settings`;
+                //info.componentFactory = SiteConfigComponent;
                 info.closeable = true;
                 break;
 
@@ -321,7 +326,8 @@ export class SiteDashboardComponent extends NavigableComponent implements OnDest
             case SiteTabIds.continuousDeployment:
                 info.title = this._translateService.instant(PortalResources.deploymentCenter);
                 info.iconUrl = 'image/deployment-source.svg';
-                info.componentFactory = DeploymentCenterComponent;
+                info.lazyloadRoute = this.viewInfo && `deployment`;
+                //info.componentFactory = DeploymentCenterComponent;
                 break;
             case SiteTabIds.scaleUp:
                 info.title = this._translateService.instant('Scale up');
