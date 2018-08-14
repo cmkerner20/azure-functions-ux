@@ -1,31 +1,30 @@
-import { KeyCodes, LogCategories } from './../../shared/models/constants';
-import { TreeViewInfo } from 'app/tree-view/models/tree-view-info';
-import { FunctionAppService } from 'app/shared/services/function-app.service';
-import { FunctionAppContext } from './../../shared/function-app-context';
-import { LogService } from 'app/shared/services/log.service';
-import { Subject } from 'rxjs/Subject';
-import { AppNode } from './../../tree-view/app-node';
-import { FunctionsNode } from './../../tree-view/functions-node';
-import { AiService } from './../../shared/services/ai.service';
-import { BindingList } from './../../shared/models/binding-list';
-import { BindingManager } from './../../shared/models/binding-manager';
+import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { BindingComponent } from './../../binding/binding.component';
-import { GlobalStateService } from './../../shared/services/global-state.service';
-import { FunctionInfo } from './../../shared/models/function-info';
-import { DropDownElement } from './../../shared/models/drop-down-element';
-import { Component, Input, SimpleChanges, OnChanges, Output } from '@angular/core';
+import { CreateCard } from 'app/function/function-new/function-new.component';
+import { BroadcastEvent } from 'app/shared/models/broadcast-event';
+import { ErrorEvent } from 'app/shared/models/error-event';
+import { BroadcastService } from 'app/shared/services/broadcast.service';
+import { EmbeddedService } from 'app/shared/services/embedded.service';
+import { FunctionAppService } from 'app/shared/services/function-app.service';
+import { LogService } from 'app/shared/services/log.service';
+import { TreeViewInfo } from 'app/tree-view/models/tree-view-info';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { Action, UIFunctionBinding } from '../../shared/models/binding';
 import { FunctionTemplate } from '../../shared/models/function-template';
 import { PortalResources } from '../../shared/models/portal-resources';
-import { Action } from '../../shared/models/binding';
-import { UIFunctionBinding } from '../../shared/models/binding';
 import { PortalService } from '../../shared/services/portal.service';
-import { Observable } from 'rxjs/Observable';
-import { CreateCard } from 'app/function/function-new/function-new.component';
-import { EmbeddedService } from 'app/shared/services/embedded.service';
-import { BroadcastService } from 'app/shared/services/broadcast.service';
-import { ErrorEvent } from 'app/shared/models/error-event';
-import { BroadcastEvent } from 'app/shared/models/broadcast-event';
+import { BindingComponent } from './../../binding/binding.component';
+import { FunctionAppContext } from './../../shared/function-app-context';
+import { BindingList } from './../../shared/models/binding-list';
+import { BindingManager } from './../../shared/models/binding-manager';
+import { KeyCodes, LogCategories } from './../../shared/models/constants';
+import { DropDownElement } from './../../shared/models/drop-down-element';
+import { FunctionInfo } from './../../shared/models/function-info';
+import { AiService } from './../../shared/services/ai.service';
+import { GlobalStateService } from './../../shared/services/global-state.service';
+import { AppNode } from './../../tree-view/app-node';
+import { FunctionsNode } from './../../tree-view/functions-node';
 
 @Component({
     selector: 'function-new-detail',
@@ -366,6 +365,29 @@ export class FunctionNewDetailComponent implements OnChanges {
                         newFunctionInfo.result.context = this.context;
                         this.functionsNode = <FunctionsNode>this.appNode.children.find(node => node.title === this.functionsNode.title);
                         this.functionsNode.addChild(newFunctionInfo.result);
+
+
+                      if (this.currentTemplate.metadata.name === "Logic Apps trigger") {
+                        let logicAppResourceId = this.context.site.id.replace(/Microsoft.Web/, 'Microsoft.Logic');
+                        logicAppResourceId = logicAppResourceId.replace(/sites.*/i, 'workflows/LAT-Function');
+                        const functionId = `${this.context.site.id}/functions/${this.functionName}`;
+                        //const functionName = `${this.functionName}`;
+                        const bladeInputs = {
+                          id: logicAppResourceId,
+                          newLogicApp: true,
+                          initLogicAppDefinition: JSON.stringify({ "definition": { "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#", "actions": { "Logic App Function": { "inputs": { "function": { "id": functionId } }, "runAfter": {}, "type": "Function" } }, "contentVersion": "1.0.0.0", "outputs": {}, "parameters": {}, "triggers": {} } }), //"manual": { "inputs": { "schema": {} }, "kind": "Http", "type": "Request" } 
+                          location: this.context.site.location
+                        };
+                        this._portalService.openBladeDeprecated(
+                          {
+                            detailBlade: 'LogicAppsDesignerBlade',
+                            detailBladeInputs: bladeInputs,
+                            extension: 'Microsoft_Azure_EMA'
+                          },
+                          'LogicAppsComponent'
+                        );
+                      }
+                      
                     }
                     this._globalStateService.clearBusyState();
                 },
@@ -386,7 +408,8 @@ export class FunctionNewDetailComponent implements OnChanges {
             return;
         }
 
-        this.clickSave = true;
+      this.clickSave = true;
+
     }
 
     onKeyPress(event: KeyboardEvent) {

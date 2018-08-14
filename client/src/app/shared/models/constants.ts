@@ -1,4 +1,4 @@
-﻿export class HttpMethods {
+export class HttpMethods {
     public static GET = 'get';
     public static POST = 'post';
     public static DELETE = 'delete';
@@ -139,6 +139,7 @@ export class Order {
     public static templateOrder: string[] = [
         'HttpTrigger-',
         'TimerTrigger-',
+        'LogicAppsTrigger',
         'QueueTrigger-',
         'ServiceBusQueueTrigger-',
         'ServiceBusTopicTrigger-',

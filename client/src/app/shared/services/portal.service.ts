@@ -1,4 +1,4 @@
-﻿import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { ArmServiceHelper } from './arm.service-helper';
 import { Jwt } from './../Utilities/jwt';
 import { Url } from './../Utilities/url';
@@ -190,7 +190,7 @@ export class PortalService implements IPortalService {
             input: obj,
             bladeName: bladeName,
             operationId: operationId
-        };
+      };
 
         this.postMessage(Verbs.openBladeCollectorInputs, JSON.stringify(payload));
         return this.operationStream

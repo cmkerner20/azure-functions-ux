@@ -84,6 +84,7 @@ export class FunctionNewComponent extends FunctionAppContextComponent implements
         'eventHub': { color: '#719516', barcolor: '#E5EDD8', icon: 'image/eventHub.svg' },
         'http': { color: '#731DDA', barcolor: '#EBDBFA', icon: 'image/http.svg' },
         'iot': { color: '#990000', barcolor: '#EFD9D9', icon: 'image/iot.svg' },
+        'logicApps': { color: '#719516', barcolor: '#E5EDD8', icon: 'image/logicapp-white.svg' },
         'other': { color: '#000000', barcolor: '#D9D9D9', icon: 'image/other.svg' },
         'queue': { color: '#1E5890', barcolor: '#DAE6EF', icon: 'image/queue.svg' },
         'serviceBus': { color: '#F67600', barcolor: '#FDEDDE', icon: 'image/serviceBus.svg' },

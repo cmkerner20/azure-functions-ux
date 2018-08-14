@@ -1,0 +1,42 @@
+{
+
+"definition": {
+
+"$schema": 
+"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+
+"actions": {
+
+"DecodeXML": {
+
+"inputs": {
+
+"function": {
+
+"id": "/subscriptions/80d4fe69-c95b-4dd2-a938-9250f1c8ab03/resourceGroups/advanced-patterns/providers/Microsoft.Web/sites/advanced-patterns/functions/DecodeXML"
+
+}
+
+},
+
+"runAfter": {},
+
+"type": "Function"
+
+}
+
+},
+
+"contentVersion": 
+"1.0.0.0",
+
+"outputs": {},
+
+"parameters": {},
+
+"triggers": {}
+
+}
+
+}
+
