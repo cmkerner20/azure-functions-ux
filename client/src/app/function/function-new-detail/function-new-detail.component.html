@@ -96,14 +96,6 @@
     {{ 'create' | translate }}
   </button>
 
-  <div *ngIf="model.trigger.type === 'LogicAppsTrigger'">
-    <button class="custom-button"
-            [disabled]="!areInputsValid || !aadConfigured"
-            (click)="onCreate()">
-      {{ 'continue' | translate }}
-    </button>
-  </div>
-
   <button class="custom-button-invert"
           (click)="close()">
     {{ 'cancel' | translate}}
